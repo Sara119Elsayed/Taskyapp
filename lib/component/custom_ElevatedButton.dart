@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
   const CustomElevatedbutton({super.key,required this.textData,this.onPressFunc});
   
-   final String? textData ; 
+   final String textData ; 
 
   final VoidCallback? onPressFunc;
 
@@ -20,9 +20,9 @@ import 'package:flutter/material.dart';
             onPressed:onPressFunc,
             
              child:Text(
-              "$textData",
+              textData,
             ),
-
+    
              ),
           ],
     );
