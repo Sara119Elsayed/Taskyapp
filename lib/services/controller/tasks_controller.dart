@@ -4,146 +4,103 @@ import 'package:flutter/cupertino.dart';
 import 'package:taskyapp/models/task_model.dart';
 import 'package:taskyapp/services/prefrencesetmanager_service.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class TasksController with ChangeNotifier {
-
-  String? username;
-  String? userImage;
   List<TaskModel> tasks = [];
-  int totalTasks  = 0 ; 
-  int totalDoneTasks  = 0 ;
-  double percent =  0;
-  bool isLoading = false;
-  List<TaskModel> doneTasks =[];
+  List<TaskModel> completedTasks = [];
+  List<TaskModel> todoTasks = [];
+  bool isLoading = true;
+  int totalDoneTasks = 0;
+  int get totalTasks => tasks.length;
 
-
-  initalFun()
-  {
-       loadUserData();
-       loadTasks();
+  double get percent {
+    if (totalTasks == 0) return 0.0;
+    return totalDoneTasks / totalTasks;
   }
 
-
-  void loadUserData() async
-  {
-
-    username = PrefrencesetManagerService().getString("username");
-
-    userImage = PrefrencesetManagerService().getString("userimage");
-      
+  init() async {
+    await loadTasks();
+    loadCompletedTasks();
+    loadTodoTasks();
+    isLoading = false;
     notifyListeners();
   }
 
-
-
-  void loadTasks() async
-  {
-
-    isLoading = true;
-     
-    final alltasks = PrefrencesetManagerService().getString("tasks");
-    
-    if(alltasks != null)
-    {
-        final tasksDecode = jsonDecode(alltasks) as List<dynamic>;
-
-
-        tasks = tasksDecode.map((element)=>
-        TaskModel.fromJson(element)).toList();
+  Future<void> loadTasks() async {
+    final finalTask = PrefrencesetManagerService().getString(StorageKey.tasks);
+    if (finalTask != null) {
+      final taskAfterDecode = jsonDecode(finalTask) as List<dynamic>;
+      tasks =
+          taskAfterDecode.map((element) => TaskModel.fromMap(element)).toList();
     }
-
-        isLoading = false;
-        notifyListeners();
-
   }
 
-
-
-  void calculatePercent() 
-  {
-    totalTasks = tasks.length;
-    totalDoneTasks = tasks.where((e) => e.isDone).length;
-    percent = totalTasks == 0 ? 0 : totalDoneTasks / totalTasks;
+  void loadCompletedTasks() {
+    completedTasks = tasks.where((task) => task.isCompleted).toList();
+    totalDoneTasks = completedTasks.length;
   }
 
+  void loadTodoTasks() {
+    todoTasks = tasks.where((task) => !task.isCompleted).toList();
+  }
 
-  void AddTask(int Id ,TextEditingController tasknameController,TextEditingController taskdescraptionController,bool isHighPriorityVal) async
-  {
-     final String? list =  PrefrencesetManagerService().getString('tasks');
+  Future<void> addTask(TaskModel task) async {
+    tasks.add(task.copyWith(
+      id: tasks.length + 1,
+    ));
+    final taskMap = tasks.map((e) => e.toMap()).toList();
+    await PrefrencesetManagerService().setString(StorageKey.tasks, jsonEncode(taskMap));
+    loadCompletedTasks();
+    loadTodoTasks();
+    notifyListeners();
+  }
 
-      List<dynamic> listTasks = [];
-
-      if (list != null) 
-      {
-        listTasks = jsonDecode(list);
-      }
-
-      TaskModel taskModel = TaskModel(
-        id: listTasks.length + 1,
-        taskName: tasknameController.text,
-        taskDescription: taskdescraptionController.text,
-        isHighPriority: isHighPriorityVal,
+  // change swatch isCompleted status
+  void changeTaskStatus(int id, bool isCompleted) {
+    final taskIndex = tasks.indexWhere((task) => task.id == id);
+    if (taskIndex != -1) {
+      tasks[taskIndex] = tasks[taskIndex].copyWith(isCompleted: isCompleted);
+      PrefrencesetManagerService().setString(
+        StorageKey.tasks,
+        jsonEncode(tasks.map((e) => e.toMap()).toList()),
       );
-
-        listTasks.add(taskModel.toJson());
-
-      String value = jsonEncode(listTasks);
-
-      await PrefrencesetManagerService().setString('tasks', value);
-
+      loadCompletedTasks();
+      loadTodoTasks();
+      notifyListeners();
+    }
   }
 
-
- void doneTasksFun(bool? val , int? index) async
-  {
-     if(index != null)
-     { 
-    
-        tasks[index].isDone = val ?? false;
-
-        calculatePercent();
-
-        final updatesTask = tasks.map((element)=>element.toJson()).toList();
-        PrefrencesetManagerService().setString("tasks",jsonEncode(updatesTask)); 
-        notifyListeners();    
-     }
-   
+  Future<void> deleteTask(int id) async {
+    tasks.removeWhere((task) => task.id == id);
+    final taskMap = tasks.map((e) => e.toMap()).toList();
+    await PrefrencesetManagerService().setString(StorageKey.tasks, jsonEncode(taskMap));
+    loadCompletedTasks();
+    loadTodoTasks();
+    notifyListeners();
   }
 
-
-
-  void deleteTask(int? index) async
-  {
-
-      if(index != null)
-      {
-         tasks.removeAt(index);
-
-        calculatePercent();
-
-        final updatedTask = tasks.map((element) => element.toJson()).toList();
-        
-        PrefrencesetManagerService().setString("tasks", jsonEncode(updatedTask));
-
-        notifyListeners();
-      }
-
-
+  Future<void> editTask(TaskModel task) async {
+    final taskIndex = tasks.indexWhere((t) => t.id == task.id);
+    if (taskIndex != -1) {
+      tasks[taskIndex] = task;
+      final taskMap = tasks.map((e) => e.toMap()).toList();
+      await PrefrencesetManagerService().setString(
+        StorageKey.tasks,
+        jsonEncode(taskMap),
+      );
+      loadCompletedTasks();
+      loadTodoTasks();
+      notifyListeners();
+    }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  Future<void> clearTasks() async {
+    tasks.clear();
+    completedTasks.clear();
+    todoTasks.clear();
+    totalDoneTasks = 0;
+    await PrefrencesetManagerService().remove(StorageKey.tasks);
+    notifyListeners();
+  }
 }
