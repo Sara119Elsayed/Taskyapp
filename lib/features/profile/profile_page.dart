@@ -14,9 +14,14 @@ import 'package:taskyapp/services/controller/profile_controller.dart';
 import 'package:taskyapp/services/controller/tasks_controller.dart';
 import 'package:taskyapp/services/prefrencesetmanager_service.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileController = Provider.of<ProfileController>(context);
@@ -55,6 +60,7 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () async {
                         showImageSourceDialog(context, (XFile file) {
                           profileController.saveUserImage(file);
+                          setState(() {}); // Refresh UI after image change
                         });
                       },
                       child: CircleAvatar(
@@ -96,8 +102,8 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               ListTile(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => UserDetailsScreen(
@@ -106,6 +112,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   );
+                  setState(() {}); // Refresh profile info after return
                 },
                 contentPadding: EdgeInsets.zero,
                 title: const Text('User Details'),
@@ -143,7 +150,7 @@ class ProfileScreen extends StatelessWidget {
                   await PrefrencesetManagerService().setBool(StorageKey.theme, true);
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) =>  WelcomePage()),
+                    MaterialPageRoute(builder: (_) => WelcomePage()),
                   );
                 },
                 contentPadding: EdgeInsets.zero,
