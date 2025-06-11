@@ -29,7 +29,7 @@ class WelcomePage extends StatelessWidget {
               key: _key,
               child: Column(
                 children: [
-                 SizedBox(height: 16),
+                 SizedBox(height: 52),
                  
                   Row(
                    mainAxisAlignment: MainAxisAlignment.center,
@@ -51,9 +51,9 @@ class WelcomePage extends StatelessWidget {
                     children: [
                       Text(
                         'Welcome To Tasky',
-                         style: Theme.of(context).textTheme.displaySmall,
+                         style: Theme.of(context).textTheme.displayMedium,
                       ),
-                      SvgPicture.asset('assets/images/waving_hand.svg'),
+                      SvgPicture.asset('assets/images/handimage.svg'),
                     ],
                   ),
               
@@ -64,7 +64,7 @@ class WelcomePage extends StatelessWidget {
                    style: Theme.of(context).textTheme.displaySmall!.copyWith(fontSize: 16),
                   ),
               
-                  const SizedBox(height: 29),
+                  const SizedBox(height: 30),
                         
                  SvgPicture.asset('assets/images/welcome.svg', width: 215, height: 200),
               
