@@ -1,35 +1,52 @@
 class TaskModel {
-
   final int id;
-  final String taskName;
-  final String taskDescription;
+  final String name;
+  final String description;
   final bool isHighPriority;
-  bool isDone;
+  bool isCompleted;
 
-  TaskModel({required this.id,required this.taskName,required this.taskDescription,required this.isHighPriority,this.isDone = false,});
+  TaskModel({
+    this.id = 0,
+    required this.name,
+    required this.description,
+    required this.isHighPriority,
+    this.isCompleted = false,
+  });
 
-  factory TaskModel.fromJson(Map<String, dynamic> json) {
-    return TaskModel(
-      id: json["id"],
-      taskName: json["taskName"],
-      taskDescription: json["taskDescription"],
-      isHighPriority: json["isHighPriority"],
-      isDone: json["isDone"] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "taskName": taskName,
-      "taskDescription": taskDescription,
-      "isHighPriority": isHighPriority,
-      "isDone": isDone,
+      'id': id,
+      'name': name,
+      'description': description,
+      'isHighPriority': isHighPriority,
+      'isCompleted': isCompleted,
     };
   }
 
-  @override
-  String toString() {
-    return 'TaskModel{id: $id, taskName: $taskName, taskDescription: $taskDescription, isHighPriority: $isHighPriority, isDone: $isDone}';
+  factory TaskModel.fromMap(Map<String, dynamic> map) {
+    return TaskModel(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      isHighPriority: map['isHighPriority'],
+      isCompleted: map['isCompleted'] ?? false,
+    );
+  }
+
+  // copy constructor to create a new instance with modified values
+  TaskModel copyWith({
+    int? id,
+    String? name,
+    String? description,
+    bool? isHighPriority,
+    bool? isCompleted,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      isHighPriority: isHighPriority ?? this.isHighPriority,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
   }
 }
