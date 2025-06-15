@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -47,8 +48,9 @@ class _HomePage extends State<HomePage> {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 5),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Consumer<ProfileController>(
                       builder: (context, userController, _) {
@@ -64,11 +66,13 @@ class _HomePage extends State<HomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Yuhuu ,Your work Is',
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
+            const SizedBox(height: 25),
+           
+              Text(
+                'Yuhuu ,Your work Is',
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+           
             const SizedBox(height: 4),
             Row(
               children: [
