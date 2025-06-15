@@ -55,7 +55,7 @@ class _HomePage extends State<HomePage> {
                     Consumer<ProfileController>(
                       builder: (context, userController, _) {
                         return Text(
-                          'Good Evening, ${userController.username}',
+                         '${Theme.of(context).brightness == Brightness.dark ? 'Good Evening' : 'Good Morning'}, ${userController.username}',
                           style: Theme.of(context).textTheme.displayMedium,
                         );
                       },
