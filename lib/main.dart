@@ -23,7 +23,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => TasksController()..init()),
         ChangeNotifierProvider(
-            create: (_) => ProfileController()), // your second provider
+            create: (_) => ProfileController()), 
       ],
       child: const MyApp(),
     ),
@@ -44,9 +44,7 @@ class MyApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           themeMode: themeMode,
-            home:PrefrencesetManagerService().getString(StorageKey.username) == null
-               ? HomePage()
-               : BottomNavigation(),
+          home:PrefrencesetManagerService().getString(StorageKey.username) == null? WelcomePage(): BottomNavigation(),
         );
       },
     );
