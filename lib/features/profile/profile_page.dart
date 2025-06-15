@@ -24,9 +24,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+  
     final profileController = Provider.of<ProfileController>(context);
     final userImage = profileController.userImagePath;
-    final username = profileController.username ?? 'Guest';
+    final username = profileController.username ?? 'Sara';
     final motivationQuote = profileController.motivationQuote.isEmpty
         ? 'One task at a time. One step closer.'
         : profileController.motivationQuote;
@@ -112,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   );
-                  setState(() {}); // Refresh profile info after return
+                  setState(() {}); 
                 },
                 contentPadding: EdgeInsets.zero,
                 title: const Text('User Details'),
