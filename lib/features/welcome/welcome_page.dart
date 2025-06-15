@@ -4,6 +4,7 @@ import 'package:taskyapp/component/custom_ElevatedButton.dart';
 import 'package:taskyapp/component/custom_textfiled.dart';
 import 'package:taskyapp/core/constants/storage_key.dart';
 import 'package:taskyapp/features/home/home_page.dart';
+import 'package:taskyapp/screens/bottom_navigation.dart';
 import 'package:taskyapp/services/prefrencesetmanager_service.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -104,7 +105,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) {
-                              return HomePage();
+                              return BottomNavigation();
                             },
                           ),
                         );
