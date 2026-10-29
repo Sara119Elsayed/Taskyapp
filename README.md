@@ -1,16 +1,11 @@
-# taskyapp
+📝 Tasky Management App (Flutter)
+A clean, responsive task management Flutter app with persistent local storage, theme support, and user profile customization. Inspired by a Figma design and implemented with provider, shared_preferences, and image support.
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+✨ Features
+Add, edit, delete, and mark tasks as complete
+User-friendly navigation with a bottom navigation bar
+Categorized task views: All, To-Do, Completed, High Priority
+Persistent storage using shared_preferences
+User profile with image, name, and motivation quote
+Responsive to light/dark mode
+Cupertino-style UI with flutter_svg and image_picker
